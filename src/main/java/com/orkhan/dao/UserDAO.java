@@ -18,9 +18,9 @@ import java.util.List;
  *
  */
 public class UserDAO {
-    private String jdbcURL = "jdbc:mysql://192.168.0.110:3306/orkhan?useSSL=false";
-    private String jdbcUsername = "orkhan";
-    private String jdbcPassword = "1234Orkhan!";
+    private String jdbcURL = "jdbc:mysql://192.168.1.127:3306/ankur?useSSL=false";
+    private String jdbcUsername = "ankur";
+    private String jdbcPassword = "Ankur1234!";
 
     private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (name, email, country) VALUES " +
             " (?, ?, ?);";
