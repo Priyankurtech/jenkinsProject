@@ -16,13 +16,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-/**
- * ControllerServlet.java
- * This servlet acts as a page controller for the application, handling all
- * requests from the user.
- * @email Ramesh Fadatare
- */
-
 @WebServlet("/")
 public class UserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -91,33 +84,86 @@ public class UserServlet extends HttpServlet {
 
     }
 
+
     private void insertUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
-        User newUser = new User(name, email, country);
-        userDAO.insertUser(newUser);
-        response.sendRedirect("list");
+        Connection connection = null;
+        try {
+            connection = userDAO.getConnection();
+            connection.setAutoCommit(false);
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String country = request.getParameter("country");
+            User newUser = new User(name, email, country);
+            userDAO.insertUser(newUser);
+            response.sendRedirect("list");
+            connection.commit();
+        } catch (SQLException ex) {
+            if (connection != null) {
+                connection.rollback();
+            }
+            throw new ServletException("Error inserting user", ex);
+        } finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
     }
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
+        Connection connection = null;
+        try {
+            connection = userDAO.getConnection();
+            connection.setAutoCommit(false);
 
-        User book = new User(id, name, email, country);
-        userDAO.updateUser(book);
-        response.sendRedirect("list");
+            int id = Integer.parseInt(request.getParameter("id"));
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String country = request.getParameter("country");
+
+            User book = new User(id, name, email, country);
+            userDAO.updateUser(book);
+            response.sendRedirect("list");
+
+            connection.commit();
+        } catch (SQLException ex) {
+            if (connection != null) {
+                connection.rollback();
+            }
+            throw new ServletException("Error update user", ex);
+        } finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
     }
 
     private void deleteUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        userDAO.deleteUser(id);
-        response.sendRedirect("list");
+        Connection connection = null;
+        try {
+            connection = userDAO.getConnection();
+            connection.setAutoCommit(false);
+            int id = Integer.parseInt(request.getParameter("id"));
+            userDAO.deleteUser(id);
+            response.sendRedirect("list");
 
+
+            connection.commit();
+        } catch (SQLException ex) {
+            if (connection != null) {
+                connection.rollback();
+            }
+            throw new ServletException("Error deleteing user", ex);
+        } finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
     }
+
 }
