@@ -1,9 +1,5 @@
-package com.orkhan.web;
 
-
-
-import com.orkhan.dao.UserDAO;
-import com.orkhan.model.User;
+package com.ankur.servlet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,7 +7,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ankur.dao.UserDAO;
+import com.ankur.dto.User;
+
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -87,35 +88,22 @@ public class UserServlet extends HttpServlet {
 
     private void insertUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        Connection connection = null;
-        try {
-            connection = userDAO.getConnection();
-            connection.setAutoCommit(false);
-            String name = request.getParameter("name");
-            String email = request.getParameter("email");
-            String country = request.getParameter("country");
-            User newUser = new User(name, email, country);
-            userDAO.insertUser(newUser);
-            response.sendRedirect("list");
-            connection.commit();
-        } catch (SQLException ex) {
-            if (connection != null) {
-                connection.rollback();
-            }
-            throw new ServletException("Error inserting user", ex);
-        } finally {
-            if (connection != null) {
-                connection.setAutoCommit(true);
-                connection.close();
-            }
-        }
+    	Connection connection = userDAO.getConnection();
+        connection.setAutoCommit(false);
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String country = request.getParameter("country");
+        User newUser = new User(name, email, country);
+        userDAO.insertUser(newUser);
+        response.sendRedirect("list");
+        connection.commit();
+        
     }
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        Connection connection = null;
-        try {
-            connection = userDAO.getConnection();
+        
+            Connection connection = userDAO.getConnection();
             connection.setAutoCommit(false);
 
             int id = Integer.parseInt(request.getParameter("id"));
@@ -126,26 +114,15 @@ public class UserServlet extends HttpServlet {
             User book = new User(id, name, email, country);
             userDAO.updateUser(book);
             response.sendRedirect("list");
-
             connection.commit();
-        } catch (SQLException ex) {
-            if (connection != null) {
-                connection.rollback();
-            }
-            throw new ServletException("Error update user", ex);
-        } finally {
-            if (connection != null) {
-                connection.setAutoCommit(true);
-                connection.close();
-            }
-        }
+
+            
     }
 
     private void deleteUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        Connection connection = null;
-        try {
-            connection = userDAO.getConnection();
+        
+           Connection connection = userDAO.getConnection();
             connection.setAutoCommit(false);
             int id = Integer.parseInt(request.getParameter("id"));
             userDAO.deleteUser(id);
@@ -153,17 +130,7 @@ public class UserServlet extends HttpServlet {
 
 
             connection.commit();
-        } catch (SQLException ex) {
-            if (connection != null) {
-                connection.rollback();
-            }
-            throw new ServletException("Error deleteing user", ex);
-        } finally {
-            if (connection != null) {
-                connection.setAutoCommit(true);
-                connection.close();
-            }
-        }
+        
     }
 
 }

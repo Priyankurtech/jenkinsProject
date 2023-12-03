@@ -1,12 +1,10 @@
-package com.orkhan.dao;
-
-
-
-import com.orkhan.model.User;
+package com.ankur.dao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ankur.dto.User;
 
 
 public class UserDAO {
@@ -24,7 +22,7 @@ public class UserDAO {
 
     public UserDAO() {}
 
-    protected Connection getConnection() {
+    public Connection getConnection() {
         Connection connection = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
