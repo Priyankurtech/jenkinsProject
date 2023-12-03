@@ -8,7 +8,7 @@ import com.ankur.dto.User;
 
 
 public class UserDAO {
-    private String jdbcURL = "jdbc:mysql://192.168.1.116:3306/ankur?useSSL=false";
+    private String jdbcURL = "jdbc:mysql://192.168.1.118:3306/ankur?useSSL=false";
     private String jdbcUsername = "ankur";
     private String jdbcPassword = "Ankur1234!";
 
